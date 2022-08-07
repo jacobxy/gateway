@@ -3,9 +3,11 @@ package main
 import (
 	"context"
 	"lokli/lcontext"
+	"math/rand"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"time"
 )
 
 func GetReverseProxy(ctx context.Context, urlstr string) *httputil.ReverseProxy {
@@ -23,6 +25,8 @@ func GetReverseProxy(ctx context.Context, urlstr string) *httputil.ReverseProxy 
 }
 
 func Handle1(rsp http.ResponseWriter, req *http.Request) {
+	tm := rand.Intn(1000)
+	time.Sleep(tm * time.Millisecond)
 	rsp.Write([]byte("handle1"))
 }
 
