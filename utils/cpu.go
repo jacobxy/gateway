@@ -46,6 +46,6 @@ func (c *cpuinterval) GetCPU() float64 {
 	// info, _ := cpu.Info()
 	// log.Println(info)
 	// cpuValue.Store(info)
-	r, _ := cpu.Percent(100*c.internal, false)
+	r, _ := cpu.Percent(c.internal, false)
 	return r[0]
 }
