@@ -53,6 +53,7 @@ func (lc *LokContext) ServeHTTP(rsp http.ResponseWriter, req *http.Request) {
 		return
 	}
 	if ok, err := lc.Allow(); !ok || err != nil {
+		log.Println("overload max")
 		rsp.Write([]byte("cpu protect self"))
 		return
 	}
