@@ -31,6 +31,7 @@ func NewLokContext(url string) *LokContext {
 
 func (lc *LokContext) Allow() (bool, error) {
 	use := utils.GetCpuUsage()
+	fmt.Println("cpu usage:", use)
 	if use > lc.overloadValue {
 		return false, nil
 	}
