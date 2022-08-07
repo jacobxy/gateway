@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"log"
 	"sync/atomic"
 	"time"
 
@@ -37,7 +36,7 @@ func (c *cpuinterval) Start() {
 		old := GetCpuUsage()
 		v := c.GetCPU()
 		new := (1-decay)*old + decay*v
-		log.Println(old, v, new)
+		// log.Println(old, v, new)
 		cpuValue.Store(new)
 	}
 }
