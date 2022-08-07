@@ -13,6 +13,8 @@ import (
 	"net/url"
 	"strings"
 	"time"
+
+	"golang.org/x/time/rate"
 )
 
 type LokContext struct {
@@ -21,13 +23,19 @@ type LokContext struct {
 	Timout        time.Duration
 	req           *http.Request
 	overloadValue float64
+	limit         rate.Limit
 }
 
 func NewLokContext(url string) *LokContext {
 	return &LokContext{
 		Url:           url,
 		overloadValue: 30,
+		limit:         rate.NewLimiter(500, 1000),
 	}
+}
+
+func (lc *LokContext) RateAllow(ctx context.Context) error {
+	return lc.limit.Wait(ctx)
 }
 
 func (lc *LokContext) Allow() (bool, error) {
@@ -40,8 +48,12 @@ func (lc *LokContext) Allow() (bool, error) {
 }
 
 func (lc *LokContext) ServeHTTP(rsp http.ResponseWriter, req *http.Request) {
+	if err := lc.RateAllow(req.Context()); err != nil {
+		rsp.Write([]byte(" rate limit exceeded"))
+		return
+	}
 	if ok, err := lc.Allow(); !ok || err != nil {
-		rsp.Write([]byte("failed"))
+		rsp.Write([]byte("cpu protect self"))
 		return
 	}
 	lc.req = req
