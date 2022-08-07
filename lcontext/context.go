@@ -23,7 +23,7 @@ type LokContext struct {
 	Timout        time.Duration
 	req           *http.Request
 	overloadValue float64
-	limit         rate.Limit
+	limit         *rate.Limiter
 }
 
 func NewLokContext(url string) *LokContext {
