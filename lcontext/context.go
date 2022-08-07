@@ -29,7 +29,7 @@ type LokContext struct {
 func NewLokContext(url string) *LokContext {
 	return &LokContext{
 		Url:           url,
-		overloadValue: 20,
+		overloadValue: 40,
 		limit:         rate.NewLimiter(500, 1000),
 	}
 }
