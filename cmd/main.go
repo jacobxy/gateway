@@ -26,7 +26,7 @@ func GetReverseProxy(ctx context.Context, urlstr string) *httputil.ReverseProxy 
 
 func Handle1(rsp http.ResponseWriter, req *http.Request) {
 	tm := rand.Intn(1000)
-	time.Sleep(tm * time.Millisecond)
+	time.Sleep(time.Duration(tm) * time.Millisecond)
 	rsp.Write([]byte("handle1"))
 }
 
