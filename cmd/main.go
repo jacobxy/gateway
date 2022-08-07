@@ -30,7 +30,7 @@ func Handle2(rsp http.ResponseWriter, req *http.Request) {
 	rsp.Write([]byte("handle2"))
 }
 func main() {
-	h := lcontext.NewLokContext("http://81.68.215.227:9200/h1")
+	h := lcontext.NewLokContext("/h1")
 	mux := http.NewServeMux()
 	mux.HandleFunc("/h1", Handle1)
 	mux.HandleFunc("/h2", Handle2)
