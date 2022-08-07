@@ -19,7 +19,11 @@ func init() {
 }
 
 func GetCpuUsage() float64 {
-	return cpuValue.Load().(float64)
+	v, ok := cpuValue.Load().(float64)
+	if ok {
+		return v
+	}
+	return 0
 }
 
 type cpuinterval struct {
