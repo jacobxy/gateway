@@ -2,9 +2,7 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"lokli/lcontext"
-	"lokli/utils"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -25,7 +23,6 @@ func GetReverseProxy(ctx context.Context, urlstr string) *httputil.ReverseProxy 
 }
 
 func Handle1(rsp http.ResponseWriter, req *http.Request) {
-	fmt.Println(utils.GetCPU())
 	rsp.Write([]byte("handle1"))
 }
 

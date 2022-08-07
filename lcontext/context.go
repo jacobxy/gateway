@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"lokli/utils"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -14,19 +15,33 @@ import (
 )
 
 type LokContext struct {
-	ctx    context.Context
-	Url    string
-	Timout time.Duration
-	req    *http.Request
+	ctx           context.Context
+	Url           string
+	Timout        time.Duration
+	req           *http.Request
+	overloadValue float64
 }
 
 func NewLokContext(url string) *LokContext {
 	return &LokContext{
-		Url: url,
+		Url:           url,
+		overloadValue: 30,
 	}
 }
 
+func (lc *LokContext) Allow() (bool, error) {
+	use := utils.GetCpuUsage()
+	if use > lc.overloadValue {
+		return false, nil
+	}
+	return true, nil
+}
+
 func (lc *LokContext) ServeHTTP(rsp http.ResponseWriter, req *http.Request) {
+	if ok, err := lc.Allow(); !ok || err != nil {
+		rsp.Write([]byte("failed"))
+		return
+	}
 	lc.req = req
 	lc.ctx = req.Context()
 	// proxy := httputil.NewSingleHostReverseProxy(u)
