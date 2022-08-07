@@ -48,10 +48,10 @@ func (lc *LokContext) Allow() (bool, error) {
 }
 
 func (lc *LokContext) ServeHTTP(rsp http.ResponseWriter, req *http.Request) {
-	if err := lc.RateAllow(req.Context()); err != nil {
-		rsp.Write([]byte(" rate limit exceeded"))
-		return
-	}
+	// if err := lc.RateAllow(req.Context()); err != nil {
+	// 	rsp.Write([]byte(" rate limit exceeded"))
+	// 	return
+	// }
 	if ok, err := lc.Allow(); !ok || err != nil {
 		log.Println("overload max")
 		rsp.Write([]byte("cpu protect self"))
