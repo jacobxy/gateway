@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"lokli/lcontext"
+	"lokli/utils"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -23,6 +25,7 @@ func GetReverseProxy(ctx context.Context, urlstr string) *httputil.ReverseProxy 
 }
 
 func Handle1(rsp http.ResponseWriter, req *http.Request) {
+	fmt.Println(utils.GetCPU())
 	rsp.Write([]byte("handle1"))
 }
 
@@ -36,5 +39,5 @@ func main() {
 	mux.HandleFunc("/h2", Handle2)
 	mux.Handle("/h", h)
 
-	http.ListenAndServe(":8080", mux)
+	http.ListenAndServe(":9200", mux)
 }
