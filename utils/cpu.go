@@ -15,7 +15,7 @@ var cpuValue atomic.Value
 const decay = 0.95
 
 func init() {
-	c := cpuinterval{500 * time.Microsecond}
+	c := cpuinterval{500 * time.Millisecond}
 	go c.Start()
 }
 
@@ -33,8 +33,7 @@ type cpuinterval struct {
 
 func (c *cpuinterval) Start() {
 	tk := time.NewTimer(c.internal)
-	for {
-		<-tk.C
+	for range tk.C {
 		old := GetCpuUsage()
 		v := c.GetCPU()
 		new := (1-decay)*old + decay*v
