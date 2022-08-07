@@ -32,7 +32,7 @@ type cpuinterval struct {
 }
 
 func (c *cpuinterval) Start() {
-	tk := time.NewTimer(c.internal)
+	tk := time.NewTicker(c.internal)
 	for range tk.C {
 		old := GetCpuUsage()
 		v := c.GetCPU()
