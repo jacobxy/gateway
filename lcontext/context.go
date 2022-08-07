@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"strings"
 	"time"
 )
 
@@ -57,6 +58,9 @@ func (lc *LokContext) ServeHTTP(rsp http.ResponseWriter, req *http.Request) {
 
 func (lc *LokContext) preDirector(out *http.Request) {
 	log.Println(lc.req.Host)
+	if strings.HasPrefix(lc.Url, "/") {
+		lc.Url = "http://" + lc.req.Host + lc.Url
+	}
 	b, _ := ioutil.ReadAll(lc.req.Body)
 	fmt.Println(string(b))
 	u, _ := url.Parse(lc.Url)
