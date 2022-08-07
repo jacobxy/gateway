@@ -34,8 +34,12 @@ func NewLokContext(url string) *LokContext {
 	}
 }
 
-func (lc *LokContext) RateAllow(ctx context.Context) error {
+func (lc *LokContext) RateWait(ctx context.Context) error {
 	return lc.limit.Wait(ctx)
+}
+
+func (lc *LokContext) RateAllow(ctx context.Context) bool {
+	return lc.limit.Allow(ctx)
 }
 
 func (lc *LokContext) Allow() (bool, error) {
@@ -48,10 +52,17 @@ func (lc *LokContext) Allow() (bool, error) {
 }
 
 func (lc *LokContext) ServeHTTP(rsp http.ResponseWriter, req *http.Request) {
-	// if err := lc.RateAllow(req.Context()); err != nil {
+	// if err := lc.RateWait(req.Context()); err != nil {
 	// 	rsp.Write([]byte(" rate limit exceeded"))
 	// 	return
 	// }
+
+	if !lc.RateAllow(req.Context()) {
+		log.Println("rate limit exceeded")
+		rsp.Write([]byte(" rate limit exceeded"))
+		return
+	}
+
 	if ok, err := lc.Allow(); !ok || err != nil {
 		log.Println("overload max")
 		rsp.Write([]byte("cpu protect self"))
